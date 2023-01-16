@@ -34,6 +34,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Gite::class, orphanRemoval: true)]
     private Collection $gites;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'contacts')]
+    private ?self $owner = null;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: self::class, fetch: 'EAGER')]
+    private Collection $contacts;
+
     public function __toString(): string
     {
         return $this->email;
@@ -42,6 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->gites = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -138,6 +145,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($gite->getOwner() === $this) {
                 $gite->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOwner(): ?self
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?self $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(self $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(self $contact): self
+    {
+        if ($this->contacts->removeElement($contact)) {
+            // set the owning side to null (unless already changed)
+            if ($contact->getOwner() === $this) {
+                $contact->setOwner(null);
             }
         }
 

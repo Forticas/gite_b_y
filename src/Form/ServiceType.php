@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Service;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,6 +14,7 @@ class ServiceType extends AbstractType
     {
         $builder
             ->add('name')
+
         ;
     }
 
