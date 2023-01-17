@@ -10,7 +10,6 @@ use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -64,6 +63,7 @@ class GiteType extends AbstractType
                 'entry_type' => GiteServiceType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
+                'by_reference' => false,
             ])
         ;
     }
